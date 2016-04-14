@@ -83,18 +83,17 @@ function sendDecisionEmail(travelApptData, tokenRequest, res, req) {
     //build outlook email message
     
     //hardcode email for now
-    //var destinationEmailAddress = "admin@MOD571321.onmicrosoft.com";
-    var destinationEmailAddress = "joshdrew@outlook.com";
-    console.log(destinationEmailAddress);
+    var destinationEmailAddress = "admin@MOD571321.onmicrosoft.com";
+    //var destinationEmailAddress = "joshdrew@outlook.com";
+    //console.log(destinationEmailAddress);
    
     // send the mail with a callback and report back that page...
     var postBody = emailer.generatePostBody(
-        "Joshua Drew",
+        "MOD Admin",
         destinationEmailAddress
     );
     
-    console.log(postBody);
-    
+    //console.log(postBody);    
     
      requestHelper.postData(
          'graph.microsoft.com',
