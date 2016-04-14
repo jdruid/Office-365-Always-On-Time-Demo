@@ -47,6 +47,36 @@ function postData(host, path, token, data, callback) {
   });
 }
 
+function postChunkData(path, token, data, callback) {
+  var options = {
+    host: host,
+    path: path,
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      Authorization: 'Bearer ' + token,
+      'Content-Length': data.length
+    }
+  };
+
+  var req = https.request(options, function (res) {
+    var subscriptionData = '';
+    res.on('data', function (chunk) {
+      subscriptionData += chunk;
+    });
+    res.on('end', function () {
+      callback(null, JSON.parse(subscriptionData));
+    });
+  });
+
+  req.write(data);
+  req.end();
+
+  req.on('error', function (error) {
+    callback(error, null);
+  });
+}
+
 /**
  * Generates a GET request (of Content-type ```application/json```)
  * @param {string} path the path, relative to the host, to which this request will be sent
@@ -122,3 +152,4 @@ function deleteData(path, token, callback) {
 exports.postData = postData;
 exports.getData = getData;
 exports.deleteData = deleteData;
+exports.postChunkData = postChunkData;
