@@ -132,6 +132,8 @@ var drivingCommuteTime = 0;
 
 function sendTravelEventPayload(rawStartDateTime, rawEndDateTime, endLocation) {
 
+    console.log("calling search");
+
     var startLocation = "11 Times Square, New York, NY";
 
     makeWalkingGeocodeRequest(startLocation, endLocation);
@@ -160,6 +162,11 @@ function sendTravelEventPayload(rawStartDateTime, rawEndDateTime, endLocation) {
             },
             "subject": "http://www.madeon.fr/"
         };
+        
+        
+        console.log("Bing Search Results " + payload);
+        
+        return payload;
 }
 
 /**
@@ -260,7 +267,7 @@ function processNotification(subscriptionId, resource, res, next, req) {
                
            } catch (exception) {}
            
-            console.log("travel data /n" + travelApptData);
+            console.log("travel data " + travelApptData);
             
             //Keep existing polling for display purposes
             io.to(subscriptionId).emit('notification_received', endpointData);
