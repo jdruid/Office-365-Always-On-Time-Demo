@@ -3,7 +3,7 @@
  * See LICENSE in the project root for license information.
  */
 // The contents of the outbound email message that will be sent to the user
-var emailContent = '<html><head> <meta http-equiv=\'Content-Type\' content=\'text/html; charset=us-ascii\'> <title></title> </head><body style=\'font-family:calibri\'> <p>{{name}},</p> <p>This is a message from the Always On Time Service with meeting options</p> <ul><li>Walk <a href=\'http://localhost:3000/walk\' target=\'_blank\'>Walk to location</a></li><li><a href=\'http://localhost:3000/drive\' target=\'blank\'>Drive to location</a></li> </body> </html>';
+var emailContent = '<html><head> <meta http-equiv=\'Content-Type\' content=\'text/html; charset=us-ascii\'> <title></title> </head><body style=\'font-family:calibri\'> <p>{{name}},</p> <p>This is a message from the Always On Time Service with meeting options</p> <ul><li> <a href=\'http://localhost:3000/walk\' target=\'_blank\'>Walk to location</a></li><li><a href=\'http://localhost:3000/drive\' target=\'blank\'>Drive to location</a></li> </body> </html>';
 
 /**
  * Returns the outbound email message content with the supplied name populated in the text

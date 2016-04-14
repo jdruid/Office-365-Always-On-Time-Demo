@@ -9,6 +9,19 @@ var dbHelper = new (require('../helpers/dbHelper'))();
 var requestHelper = require('../helpers/requestHelper.js');
 var subscriptionConfiguration = require('../constants').subscriptionConfiguration;
 
+var eventSubject = "Travel Time";
+var startTime = new Date(2016, 04, 14, 5, 30, 0, 0);
+var endTime = new Date(2016, 04, 14, 6, 30, 0, 0);
+var commuteTime = new Date(1800000)
+var leaveByTime = new Date(2016, 04, 14, 9, 30, 0, 0); 
+
+var calObject = {
+    "start": startTime.toDateString,
+    "end": endTime.toDateString,
+    "subject": eventSubject,   
+};
+
+
 /* Redirect to start page */
 router.get('/', function (req, res) {
   res.redirect('/index.html');
@@ -18,6 +31,20 @@ router.get('/', function (req, res) {
 router.get('/signin', function (req, res) {
   res.redirect(authHelper.getAuthUrl());
 });
+
+router.get('/walk', function (req, res) {
+   res.redirect(
+              '/walk.html'
+            );
+});
+
+
+router.get('/drive', function (req, res) {
+   res.redirect(
+              '/drive.html'
+            );
+});
+
 
 // This route gets called at the end of the authentication flow.
 // It requests the subscription from Office 365, stores the subscription in a database,

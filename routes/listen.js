@@ -102,21 +102,137 @@ function sendDecisionEmail(travelApptData, tokenRequest, res, req) {
          JSON.stringify(postBody),
          
         function (result) {
-            var templateData = {
-                title: 'Microsoft Graph Connect',
-                data: "Joshua Drew",
-                actual_recipient: destinationEmailAddress
-            };
+            //var templateData = {
+            //   title: 'Microsoft Graph Connect',
+            //    data: "Joshua Drew",
+             //   actual_recipient: destinationEmailAddress
+            //};
             console.log('Send mail status code: ' + result.statusCode);
             console.log('\n\ntoken: ' + tokenRequest);
-            if (result.statusCode >= 400) {
-                templateData.status_code = result.statusCode;
-            }
-            res.render('sendMail', templateData);
+            //if (result.statusCode >= 400) {
+            //    templateData.status_code = result.statusCode;
+            //}
+            //res.render('sendMail', templateData);
         });
     
 }
 
+var bingMapsApiKey = 'Ajwk-jAfZQgh9fDWain4seISGANvnvgHEyCkP2VgEygj63iqCPLd-4cqoVIwG-KP';
+var walkingCommuteTime = 0;
+var drivingCommuteTime = 0;
+
+/**
+ * Main
+ */
+// function main() {
+
+//     sendTravelEventPayload("2016-04-13T21:30:00.0000000", "2016-04-13T22:30:00.0000000", "1681 Broadway, New York, NY");
+// }
+
+
+function sendTravelEventPayload(rawStartDateTime, rawEndDateTime, endLocation) {
+
+    var startLocation = "11 Times Square, New York, NY";
+
+    makeWalkingGeocodeRequest(startLocation, endLocation);
+    makeDrivingGeocodeRequest(startLocation, endLocation);
+
+    var travelEventStartDateTime = drivingCommuteTime;
+    var travelEventEndDateTime = rawStartDateTime;
+
+    var payload =
+        {
+            "end":
+            {
+                "@odata.type":
+                {
+                    "dateTime": travelEventEndDateTime,
+                    "timeZone": "EST"
+                }
+            },
+            "start":
+            {
+                "@odata.type":
+                {
+                    "dateTime": travelEventStartDateTime,
+                    "timeZone": "EST"
+                }
+            },
+            "subject": "http://www.madeon.fr/"
+        };
+}
+
+/**
+ * Travel Options
+ */
+function makeWalkingGeocodeRequest(startLocation, endLocation) {
+
+    // startLocation = encodeURI(document.getElementById('pointA').value); 
+    // endLocation = encodeURI(document.getElementById('pointB').value); 
+
+    var geocodeRequest = "http://dev.virtualearth.net/REST/V1/Routes/Walking?"
+        + "wp.0="
+        + startLocation
+        + "&wp.1="
+        + endLocation
+        + "&optmz=distance&output=json&jsonp=geocodeCallback&key="
+        + bingMapsApiKey;
+
+    initRestService(geocodeRequest);
+}
+
+function makeDrivingGeocodeRequest(startLocation, endLocation) {
+
+    // startLocation = encodeURI(document.getElementById('pointA').value); 
+    // endLocation = encodeURI(document.getElementById('pointB').value);
+
+    var geocodeRequest = "http://dev.virtualearth.net/REST/V1/Routes?"
+        + "wp.0="
+        + startLocation
+        + "&wp.1="
+        + endLocation
+        + "&optmz=distance&output=json&jsonp=geocodeCallback&key="
+        + bingMapsApiKey;
+
+    initRestService(geocodeRequest);
+}
+
+function initRestService(request) {
+
+    var script = document.createElement("script");
+    script.setAttribute("type", "text/javascript");
+    script.setAttribute("src", request);
+    document.body.appendChild(script);
+}
+
+function geocodeCallback(response) {
+
+    if (response.statusCode === 404) {
+        console.log("He\'s dead Jim... 404, no one is going to walk that far lolz 1337");
+    } 
+    else if (response.statusCode === 200) {
+        var travelMode = response.resourceSets[0].resources[0].routeLegs[0].itineraryItems[0].travelMode;
+
+        switch (travelMode) {
+            case "Walking": {
+                walkingCommuteTime = response.resourceSets[0].resources[0].travelDurationTraffic;
+                walkingCommuteTime = Math.ceil(walkingCommuteTime / 60);
+                document.getElementById('walkingResponse').innerHTML = "Walking time " + JSON.stringify(walkingCommuteTime + " mins");
+                break;
+            }
+            case "Driving": {
+                drivingCommuteTime = response.resourceSets[0].resources[0].travelDurationTraffic;
+                drivingCommuteTime = Math.ceil(drivingCommuteTime / 60);
+                document.getElementById('drivingResponse').innerHTML = "Driving time " + JSON.stringify(drivingCommuteTime + " mins");
+                break;
+            }
+            default: {
+                console.log("He\'s dead Jim...");
+                break;
+            }
+        }
+    }
+}
 
 
 
@@ -132,11 +248,19 @@ function processNotification(subscriptionId, resource, res, next, req) {
         '/beta/' + resource, subscriptionData.accessToken,
         function (requestError, endpointData) {
           if (endpointData) {
+              
+            console.log(endpointData);
            
+           var travelApptData = "";
+           
+           try {
             //We get the event object and now we try to determine the actual travel time to the appointment
-            var travelApptData = processTravelTime(endpointData.start.dateTime, endpointData.location.displayName);
+            //travelApptData = processTravelTime(endpointData.start.dateTime, endpointData.location.displayName);              
+              travelApptData = sendTravelEventPayload(endpointData.start.dateTime, endpointData.end.dateTime, endpointData.location.displayName);
+               
+           } catch (exception) {}
            
-            console.log(travelApptData);
+            console.log("travel data /n" + travelApptData);
             
             //Keep existing polling for display purposes
             io.to(subscriptionId).emit('notification_received', endpointData);
