@@ -1,9 +1,6 @@
-<<<<<<< HEAD
 # database files
 *.sqlite3
 
-=======
->>>>>>> e244933773b068a49a153af174f3a3a0867257ff
 # Logs
 logs
 *.log
@@ -30,7 +27,6 @@ coverage
 build/Release
 
 # Dependency directory
-<<<<<<< HEAD
 # https://docs.npmjs.com/misc/faq#should-i-check-my-node-modules-folder-into-git
 node_modules
 # Windows image file caches
@@ -135,4 +131,3 @@ node_modules
 
 # Optional REPL history
 .node_repl_history
->>>>>>> e244933773b068a49a153af174f3a3a0867257ff
