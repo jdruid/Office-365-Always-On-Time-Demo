@@ -1,0 +1,29 @@
+{
+  "name": "o365-nodejs-webhook",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "mocha ./tests/confTest.js && node ./bin/www",
+    "debug": "mocha ./tests/confTest.js && node --debug-brk ./bin/www",
+    "lint": "eslint ."
+  },
+  "dependencies": {
+    "adal-node": "^0.1.18",
+    "body-parser": "^1.13.3",
+    "express": "^4.13.3",
+    "jade": "^1.11.0",
+    "morgan": "^1.6.1",
+    "serve-favicon": "^2.3.0",
+    "socket.io": "^1.4.5",
+    "sqlite3": "^3.1.1"
+  },
+  "devDependencies": {
+    "eslint": "^2.3.0",
+    "eslint-config-airbnb": "^6.1.0",
+    "eslint-plugin-react": "^4.2.1",
+    "gulp": "^3.9.0",
+    "gulp-nodemon": "^2.0.2",
+    "gulp-plumber": "^1.0.0",
+    "mocha": "^2.4.5"
+  }
+}

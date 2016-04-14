@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--
+ * Copyright (c) Microsoft. All rights reserved. Licensed under the MIT license.
+ * See LICENSE in the project root for license information.
+ -->
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width">
+        <title></title>
+        <link rel="icon" href="/img/favicon.ico" type="image/x-icon">
+        <link rel="stylesheet" href="/css/fabric.min.css">
+        <link rel="stylesheet" href="/css/fabric.components.min.css">
+        <link rel="stylesheet" href="/stylesheets/style.css">
+    </head>
+    <body>
+        
+        <div style="background:white; width:80%; margin: 0 auto; padding:20px; border-radius:10px;">
+            <div style="float:left; width:50%;">
+                <h2 class="ms-font-su">Listen to Webhook Notifications</h2>
+                <p class="ms-font-xl">Calendar Invites for <span id="userId"></span></p>
+                <p class="ms-font-xl">Waiting for notifications for subscription <span id="subscriptionId"></span>...</p>
+                <div id="notifications"></div>
+            </div>
+            <div style="float:left;">
+                <h2 class="ms-font-su">Listen to Webhook Notifications</h2>
+                <p class="ms-font-xl">Waiting for an yes or no to get a notification</p>   
+                <div id="action_notifications"></div>         
+            </div> 
+            <div style="clear:both;"></div>  
+            <div style="margin:0 auto; width:25%;">
+                <button id="signOutButton" class="ms-Button ms-Button--compound">
+                    <span class="ms-Button-icon"><i class="ms-Icon ms-Icon--person"></i></span>
+                    <span class="ms-Button-label">Sign out</span>
+                    <span class="ms-Button-description">Sign out and delete the subscription</span>
+                </button>
+            </div>
+        </div>
+
+        <script type="text/javascript" src="http://localhost:3001/socket.io/socket.io.js"></script>
+        <script type="text/javascript" src="/js/client.js"></script>
+    </body>
+</html>
